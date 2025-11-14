@@ -9,33 +9,45 @@ using UnityEngine;
 public class PlayerControls : MonoBehaviour
 {
     [SerializeField]
-    private GameObject flashlight;
+    private Light flashlight;
     private bool flashlightActive;
     
-    private GameObject flashCam;
+    [SerializeField]
+    private Light flashCam;
     private bool flashCamActive;
     
-    public Camera playerCam;
+    [SerializeField]
+    private Camera playerCam;
     private CharacterController characterController;
     private bool canMove = true;
     
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
 
-    public float walkSpeed = 6f;
-    public float runSpeed = 12f;
-    public float jumpPower = 7f;
-    public float gravity = 10f;
-    public float lookSpeed = 2f;
-    public float lookXLimit = 45f;
-    public float defaultHeight = 2f;
-    public float crouchHeight = 1f;
-    public float crouchSpeed = 3f;
+    [SerializeField]
+    private float walkSpeed = 6f;
+    [SerializeField]
+    private float runSpeed = 12f;
+    [SerializeField]
+    private float jumpPower = 7f;
+    [SerializeField]
+    private float gravity = 10f;
+    [SerializeField]
+    private float lookSpeed = 2f;
+    [SerializeField]
+    private float lookXLimit = 45f;
+    [SerializeField]
+    private float defaultHeight = 2f;
+    [SerializeField]
+    private float crouchHeight = 1f;
+    [SerializeField]
+    private float crouchSpeed = 3f;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        flashlight.gameObject.SetActive(false);  
+        deactivateLights();
+        
         characterController = GetComponent<CharacterController>();
         lockCursor();
     }
@@ -44,6 +56,7 @@ public class PlayerControls : MonoBehaviour
     void Update()
     {
         flashlightControls();
+        flashCamControls();
         
         float movementDirectionY = moveDirection.y;
         
@@ -53,6 +66,12 @@ public class PlayerControls : MonoBehaviour
         handleCrouching();
         handleMovement();
         
+    }
+
+    private void deactivateLights()
+    {
+        flashlight.gameObject.SetActive(false);  
+        flashCam.gameObject.SetActive(false);
     }
 
     private void lockCursor()
@@ -76,6 +95,23 @@ public class PlayerControls : MonoBehaviour
                         flashlightActive = false;
                     }
                 }
+    }
+
+    private void flashCamControls()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (flashCamActive == false)
+            {
+                flashCam.gameObject.SetActive(true);
+                flashCamActive = true;
+            }
+            else
+            {
+                flashCam.gameObject.SetActive(false);
+                flashCamActive = false;
+            }
+        }
     }
 
     private void setMovementDirection(float movementDirectionY)
