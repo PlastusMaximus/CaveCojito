@@ -495,7 +495,6 @@ GameObject:
   - component: {fileID: 1170322459860156760}
   - component: {fileID: 5278135088164279354}
   - component: {fileID: 8874266175389483643}
-  - component: {fileID: 187056413736684000}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -558,6 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6704f61245667e8479389e4b851a35d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControls
+  state: 0
   flashlight: {fileID: 6376150019037236996}
   flashCam: {fileID: 6462023405756944628}
   playerCam: {fileID: 696496346331633853}
@@ -570,20 +570,6 @@ MonoBehaviour:
   defaultHeight: 2
   crouchHeight: 1
   crouchSpeed: 3
---- !u!114 &187056413736684000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4947565185654735429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2aa4e0874b153a44c97abff00f309412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerStates
-  state: 0
-  playerBody: {fileID: 122892492894517823}
 --- !u!1 &8193336216507729531
 GameObject:
   m_ObjectHideFlags: 0

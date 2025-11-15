@@ -1,13 +1,18 @@
-using System.Collections;
-
-using System.Collections.Generic;
-
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 
 public class PlayerControls : MonoBehaviour
 {
+    
+    private enum States : int
+    {
+        WALKING = 0,
+        CRAWLING = 1
+    }
+    
+    [SerializeField] private States state = States.WALKING;
+    
     [SerializeField]
     private Light flashlight;
     private bool flashlightActive;
@@ -17,11 +22,13 @@ public class PlayerControls : MonoBehaviour
     
     [SerializeField]
     private Camera playerCam;
+    [SerializeField]
     private CharacterController characterController;
     private bool canMove = true;
     
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
+    private float rotationY = 0;
 
     [SerializeField]
     private float walkSpeed = 6f;
@@ -36,6 +43,8 @@ public class PlayerControls : MonoBehaviour
     [SerializeField]
     private float lookXLimit = 45f;
     [SerializeField]
+    private float lookYLimit = 90f;
+    [SerializeField]
     private float defaultHeight = 2f;
     [SerializeField]
     private float crouchHeight = 1f;
@@ -46,6 +55,7 @@ public class PlayerControls : MonoBehaviour
     void Start()
     {
         deactivateLights();
+        handlePlayerStates();
         
         characterController = GetComponent<CharacterController>();
         lockCursor();
@@ -59,7 +69,7 @@ public class PlayerControls : MonoBehaviour
         
         float movementDirectionY = moveDirection.y;
         
-        setMovementDirection(movementDirectionY);
+        setMovementDirection();
         handleJumping(movementDirectionY);
         handleGravity();
         handleCrouching();
@@ -77,6 +87,21 @@ public class PlayerControls : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    private void handlePlayerStates()
+    {
+        switch (state)
+        {
+            case States.WALKING:
+                characterController.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                playerCam.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                break;
+            case States.CRAWLING:
+                characterController.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+                playerCam.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+                break;
+        }
     }
 
     private void flashlightControls()
@@ -110,14 +135,37 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
-    private void setMovementDirection(float movementDirectionY)
+    private void setMovementDirection()
     {
-        Vector3 forward = transform.TransformDirection(Vector3.forward);
-        Vector3 right = transform.TransformDirection(Vector3.right);
-        
+        Vector3 forward = Vector3.zero;
+        Vector3 right = Vector3.zero;
+                                
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
-        float curSpeedX = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Vertical") : 0;
-        float curSpeedY = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Horizontal") : 0;
+        
+        float curSpeedX = 0;
+        float curSpeedY = 0;
+        
+        
+        switch (state)
+        {
+            case  States.WALKING:
+                
+                forward = transform.TransformDirection(Vector3.forward);
+                right = transform.TransformDirection(Vector3.right);
+                
+                curSpeedX = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Vertical") : 0;
+                curSpeedY = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Horizontal") : 0;
+                
+                break;
+                
+            case States.CRAWLING:
+                forward = transform.TransformDirection(Vector3.up);
+                right = transform.TransformDirection(Vector3.right);
+                
+                curSpeedX = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Horizontal") : 0;
+                curSpeedY = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Vertical") : 0;
+                break;
+        }
         
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
     }
@@ -170,10 +218,22 @@ public class PlayerControls : MonoBehaviour
         
         if (canMove)
         {
-            rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
-            rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-            playerCam.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+            switch (state)
+            {
+                case States.WALKING:
+                    rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
+                    rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
+                    playerCam.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+                    transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+                    break;
+                case States.CRAWLING:
+                    rotationY += -Input.GetAxis("Mouse Y") * lookSpeed;
+                    rotationY = Mathf.Clamp(rotationY, -lookYLimit, lookYLimit);
+                    playerCam.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+                    transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+                    break;
+            }
+            
         }
     }
 
