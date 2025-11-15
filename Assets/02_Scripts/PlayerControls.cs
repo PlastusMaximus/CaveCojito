@@ -13,8 +13,7 @@ public class PlayerControls : MonoBehaviour
     private bool flashlightActive;
     
     [SerializeField]
-    private Light flashCam;
-    private bool flashCamActive;
+    private FlashCam flashCam;
     
     [SerializeField]
     private Camera playerCam;
@@ -99,17 +98,14 @@ public class PlayerControls : MonoBehaviour
 
     private void flashCamControls()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        
+        if (!flashCam.on)
         {
-            if (flashCamActive == false)
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 flashCam.gameObject.SetActive(true);
-                flashCamActive = true;
-            }
-            else
-            {
-                flashCam.gameObject.SetActive(false);
-                flashCamActive = false;
+                flashCam.on = true;
+                flashCam.flashBanged();        
             }
         }
     }
