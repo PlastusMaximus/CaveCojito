@@ -495,9 +495,10 @@ GameObject:
   - component: {fileID: 1170322459860156760}
   - component: {fileID: 5278135088164279354}
   - component: {fileID: 8874266175389483643}
+  - component: {fileID: 187056413736684000}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -558,7 +559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControls
   flashlight: {fileID: 6376150019037236996}
-  flashCam: {fileID: 1381231388012354369}
+  flashCam: {fileID: 6462023405756944628}
   playerCam: {fileID: 696496346331633853}
   walkSpeed: 6
   runSpeed: 12
@@ -569,6 +570,20 @@ MonoBehaviour:
   defaultHeight: 2
   crouchHeight: 1
   crouchSpeed: 3
+--- !u!114 &187056413736684000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4947565185654735429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aa4e0874b153a44c97abff00f309412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStates
+  state: 0
+  playerBody: {fileID: 122892492894517823}
 --- !u!1 &8193336216507729531
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,6 +806,7 @@ MonoBehaviour:
   AlphaController: {fileID: 4096346164338926463}
   flashBang: {fileID: 2862974227977474605}
   flashRecharge: {fileID: 4907582688806433543}
+  on: 0
 --- !u!1 &8610487448774548316
 GameObject:
   m_ObjectHideFlags: 0
@@ -948,7 +964,7 @@ Transform:
   m_GameObject: {fileID: 9021899644153106914}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
